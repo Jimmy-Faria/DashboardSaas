@@ -26,6 +26,11 @@ interface AuthPayload {
   password: string;
 }
 
+interface UpdateProfilePayload {
+  name: string;
+  avatarUrl?: string;
+}
+
 const defaultUsers: StoredUser[] = [
   {
     id: "demo-user",
@@ -53,6 +58,11 @@ const getInitials = (name: string) =>
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("");
+
+const normalizeAvatarUrl = (avatarUrl?: string) => {
+  const normalized = avatarUrl?.trim();
+  return normalized ? normalized : undefined;
+};
 
 const toSessionUser = (user: StoredUser): SessionUser => ({
   id: user.id,
@@ -239,4 +249,37 @@ export const restoreSessionUser = () => {
   const restoredUser = toSessionUser(matchedUser);
   writeSession(restoredUser);
   return restoredUser;
+};
+
+export const updateMockUserProfile = (
+  userId: string,
+  { name, avatarUrl }: UpdateProfilePayload
+) => {
+  const users = readUsers();
+  const index = users.findIndex((user) => user.id === userId);
+
+  if (index === -1) {
+    throw new Error("Unable to update this profile.");
+  }
+
+  const trimmedName = name.trim();
+
+  if (!trimmedName) {
+    throw new Error("Name is required.");
+  }
+
+  const nextUser: StoredUser = {
+    ...users[index],
+    name: trimmedName,
+    avatarUrl: normalizeAvatarUrl(avatarUrl),
+  };
+
+  const nextUsers = [...users];
+  nextUsers[index] = nextUser;
+  writeUsers(nextUsers);
+
+  const sessionUser = toSessionUser(nextUser);
+  writeSession(sessionUser);
+
+  return sessionUser;
 };

@@ -2,21 +2,29 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, Sparkles } from "lucide-react";
+import { Plus } from "lucide-react";
 import { TaskCard } from "./task-card";
 import { cn } from "@/lib/utils";
-import type { ProjectTask, TaskStatus } from "@/store/useProjectStore";
+import type {
+  ProjectTask,
+  TaskStatus,
+  WorkspaceMember,
+} from "@/store/useProjectStore";
 
 interface KanbanColumnProps {
   id: TaskStatus;
   title: string;
   tasks: ProjectTask[];
+  members: WorkspaceMember[];
   color: "muted" | "primary" | "warning" | "success";
+  getSubtaskCount?: (taskId: string) => number;
+  onToggleTimer?: (taskId: string) => void;
   onAddTask?: () => void;
   onDragOver?: (event: React.DragEvent) => void;
   onDrop?: (event: React.DragEvent) => void;
   onTaskDragStart?: (task: ProjectTask, sourceColumn: TaskStatus) => void;
   onTaskDragEnd?: () => void;
+  onTaskOpen?: (task: ProjectTask) => void;
   draggedTaskId?: string | null;
   index?: number;
 }
@@ -48,12 +56,16 @@ export function KanbanColumn({
   id,
   title,
   tasks,
+  members,
   color,
+  getSubtaskCount,
+  onToggleTimer,
   onAddTask,
   onDragOver,
   onDrop,
   onTaskDragStart,
   onTaskDragEnd,
+  onTaskOpen,
   draggedTaskId,
   index = 0,
 }: KanbanColumnProps) {
@@ -135,9 +147,13 @@ export function KanbanColumn({
             >
               <TaskCard
                 task={task}
+                members={members}
+                subtaskCount={getSubtaskCount?.(task.id) ?? 0}
                 isDragging={draggedTaskId === task.id}
                 onDragStart={() => onTaskDragStart?.(task, id)}
                 onDragEnd={onTaskDragEnd}
+                onToggleTimer={() => onToggleTimer?.(task.id)}
+                onOpen={() => onTaskOpen?.(task)}
               />
             </motion.div>
           ))}
@@ -149,17 +165,9 @@ export function KanbanColumn({
             animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-center justify-center py-12 text-center"
           >
-            <motion.div
-              animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="rounded-2xl border border-border/50 bg-background/60 p-6 shadow-sm backdrop-blur-sm"
-            >
-              <Sparkles className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
-              <p className="text-sm font-medium text-muted-foreground">No tasks yet</p>
-              <p className="mt-1 text-xs text-muted-foreground/70">
-                Add your first task
-              </p>
-            </motion.div>
+            <div className="rounded-2xl border border-dashed border-border/50 bg-background/60 px-5 py-4 text-sm text-muted-foreground shadow-sm backdrop-blur-sm">
+              No tasks
+            </div>
           </motion.div>
         )}
 
@@ -185,7 +193,7 @@ export function KanbanColumn({
           className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-border/60 bg-background/50 py-3 text-sm font-semibold text-muted-foreground transition-all hover:border-primary/50 hover:bg-background/80 hover:text-foreground hover:shadow-sm"
         >
           <Plus className="h-4 w-4" />
-          Add Task
+          Add task
         </motion.button>
       </div>
     </motion.div>

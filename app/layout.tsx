@@ -1,18 +1,17 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Exo_2 } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { AppProviders } from '@/components/providers/app-providers'
 import './globals.css'
 
-const inter = Inter({ 
+const exo2 = Exo_2({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-exo-2",
 });
 
 export const metadata: Metadata = {
-  title: 'ProjectFlow - Modern Project Management',
-  description: 'A flagship SaaS project management tool combining the best of Trello and Notion',
-  generator: 'v0.app',
+  title: 'ProjectFlow',
+  description: 'ProjectFlow workspace',
   icons: {
     icon: [
       {
@@ -39,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased dark`}>
+      <body className={`${exo2.variable} font-sans antialiased`}>
         <AppProviders>
           {children}
           <Analytics />

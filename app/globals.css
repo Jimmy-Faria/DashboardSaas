@@ -1,5 +1,4 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -29,13 +28,13 @@
   --chart-4: oklch(0.6 0.2 25);
   --chart-5: oklch(0.6 0.22 300);
   --radius: 1rem;
-  --sidebar: oklch(0.13 0.025 265 / 0.95);
-  --sidebar-foreground: oklch(0.95 0.01 265);
+  --sidebar: oklch(0.985 0.003 265 / 0.94);
+  --sidebar-foreground: oklch(0.18 0.02 265);
   --sidebar-primary: oklch(0.55 0.25 275);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.22 0.025 265);
-  --sidebar-accent-foreground: oklch(0.95 0.01 265);
-  --sidebar-border: oklch(0.25 0.02 265);
+  --sidebar-accent: oklch(0.94 0.008 265);
+  --sidebar-accent-foreground: oklch(0.18 0.02 265);
+  --sidebar-border: oklch(0.88 0.01 265);
   --sidebar-ring: oklch(0.55 0.25 275);
   --success: oklch(0.65 0.2 155);
   --success-foreground: oklch(1 0 0);
@@ -83,7 +82,7 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+  --font-sans: var(--font-exo-2), system-ui, sans-serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -128,10 +127,205 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
+  }
+
+  .auth-shell {
+    color-scheme: light;
+  }
+
+  .auth-shell input:-webkit-autofill,
+  .auth-shell input:-webkit-autofill:hover,
+  .auth-shell input:-webkit-autofill:focus,
+  .auth-shell textarea:-webkit-autofill,
+  .auth-shell select:-webkit-autofill {
+    -webkit-text-fill-color: #18181b;
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+}
+
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes zoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .area {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100vh;
+    background: #ffffff;
+    pointer-events: none;
+  }
+
+  .circles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .circles li {
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.88);
+    box-shadow: 0 24px 50px -30px rgba(0, 0, 0, 0.42);
+    animation: animate 19s linear infinite;
+    bottom: -150px;
+    will-change: transform, opacity;
+  }
+
+  .circles li:nth-child(1) {
+    left: 6%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+  }
+
+  .circles li:nth-child(2) {
+    left: 16%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 1s;
+    animation-duration: 11s;
+  }
+
+  .circles li:nth-child(3) {
+    left: 26%;
+    width: 34px;
+    height: 34px;
+    animation-delay: 2.5s;
+    animation-duration: 17s;
+  }
+
+  .circles li:nth-child(4) {
+    left: 36%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0.5s;
+    animation-duration: 15s;
+  }
+
+  .circles li:nth-child(5) {
+    left: 48%;
+    width: 28px;
+    height: 28px;
+    animation-delay: 4s;
+    animation-duration: 20s;
+  }
+
+  .circles li:nth-child(6) {
+    left: 58%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 2s;
+    animation-duration: 21s;
+  }
+
+  .circles li:nth-child(7) {
+    left: 70%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 5s;
+    animation-duration: 24s;
+  }
+
+  .circles li:nth-child(8) {
+    left: 80%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 9s;
+    animation-duration: 16s;
+  }
+
+  .circles li:nth-child(9) {
+    left: 88%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 3s;
+    animation-duration: 14s;
+  }
+
+  .circles li:nth-child(10) {
+    left: 92%;
+    width: 90px;
+    height: 90px;
+    animation-delay: 6s;
+    animation-duration: 13s;
+  }
+
+  @keyframes animate {
+    0% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+      opacity: 0;
+      border-radius: 0;
+    }
+
+    10% {
+      opacity: 0.48;
+    }
+
+    100% {
+      transform: translate3d(0, -1150px, 0) rotate(540deg);
+      opacity: 0;
+      border-radius: 0;
+    }
   }
 }
